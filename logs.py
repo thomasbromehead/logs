@@ -1,28 +1,40 @@
 import psycopg2
-from psycopg2 import sql
 print(psycopg2)
 
 db = psycopg2.connect("dbname=news")
 cursor = db.cursor()
+
+#FIRST EXERCISE - TOP 3 ARTICLES
+print("1st Exercise")
 cursor.execute('DROP VIEW top_articles')
 cursor.execute("CREATE VIEW top_articles AS select path, count(path) as views from log group by path order by views desc offset 1 limit 3;")
 cursor.execute("select * from top_articles")
 results = cursor.fetchall()
+print('results: ', results)
 
-print("results: ", len(results))
-cursor.execute("select path from top_articles")
-paths = cursor.fetchall()
-paths_to_slugs = []
+cursor.execute("CREATE VIEW top_articles_with_views as select slug, views from articles join top_articles on path like CONCAT('%', slug) order by views desc")
+cursor.execute("select * from top_articles_with_views")
+top_articles = cursor.fetchall()
+print('top_articles: ', top_articles)
 
-for path in paths:
-  stringified = ''.join(path)
-  paths_to_slugs.append(stringified[9:])
+print('Most successful articles of all times')
+for article in top_articles:
+  string = "ARTICLE: {} | VIEWS: {}".format(article[0], article[1])
+  print(string)
 
-print("paths to slugs:", paths_to_slugs)
+print('\n')
 
-cursor.execute("select slug, views from articles join top_articles on path like CONCAT('%', slug) order by views desc")
-c = cursor.fetchall()
-print(c)
+#2ND EXERCISE - TOP AUTHORS
+print("2nd Exercise")
+
+cursor.execute("DROP VIEW top_articles_8 CASCADE")
+cursor.execute("CREATE VIEW top_articles_8 AS select path, count(path) as views from log group by path order by views desc offset 1 limit 8;")
+cursor.execute("CREATE VIEW top_articles_with_views_8 as select articles.author, views from articles join top_articles_8 on path like CONCAT('%', slug) order by views desc;")
+cursor.execute("select name, sum(views) as total from top_articles_with_views_8 join authors on authors.id = top_articles_with_views_8.author group by name order by total desc;")
+top_authors = cursor.fetchall()
+print("------TOP AUTHORS------")
+for author in top_authors:
+  print("Author: {}, Total Views: {}".format(author[0], author[1]))
 
 # "select slug, count from articles join top_articles on path like CONCAT('%', slug)";
 
