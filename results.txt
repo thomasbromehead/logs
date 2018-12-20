@@ -1,0 +1,18 @@
+1st Exercise
+--------Most 3 successful articles of all times--------
+ARTICLE: candidate-is-jerk | VIEWS: 338647
+ARTICLE: bears-love-berries | VIEWS: 253801
+ARTICLE: bad-things-gone | VIEWS: 170098
+
+
+2nd Exercise
+------TOP AUTHORS------
+Author: Ursula La Multa, Total Views: 507594
+Author: Rudolf von Treppenwitz, Total Views: 423457
+Author: Anonymous Contributor, Total Views: 170098
+Author: Markoff Chaney, Total Views: 84557
+
+
+3rd exercise
+---------
+Days with more than 1% of 404s: Sunday,17th July 2016, percentage: 2.32 %
